@@ -16,6 +16,7 @@ public class ProfileDto{
     private Long facultyNumber;
     private String name;
     private String surname;
+    private String email;
     private String phoneNumber;
     private String specialty;
     private String field;
@@ -24,22 +25,17 @@ public class ProfileDto{
     private String workplace;
     private String position;
 
-    public ProfileDto(Long facultyNumber, String name, String surname, String phoneNumber, String specialty, String field, String form, String country, String workplace, String position) {
-        this.facultyNumber = facultyNumber;
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-        this.specialty = specialty;
-        this.field = field;
-        this.form = form;
-        this.country = country;
-        this.workplace = workplace;
-        this.position = position;
-    }
 
     public ProfileDto() {
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public String getUrlImage() {
         return urlImage;
     }

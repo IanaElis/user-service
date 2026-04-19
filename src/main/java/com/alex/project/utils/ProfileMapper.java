@@ -4,12 +4,9 @@ import com.alex.project.dto.ProfileDto;
 import com.alex.project.entity.Alumni;
 import com.alex.project.entity.Field;
 import org.hibernate.dialect.unique.AlterTableUniqueDelegate;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "cdi", uses = {SpecialtyMapperHelper.class,
+@Mapper(componentModel = MappingConstants.ComponentModel.JAKARTA, uses = {SpecialtyMapperHelper.class,
         FiledMapperHelper.class})
 public interface ProfileMapper {
         ProfileDto toDto(Alumni profile);

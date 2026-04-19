@@ -49,4 +49,12 @@ public class ProfileController {
         return Response.ok().build();
     }
 
+    @POST
+    @Path("/reject")
+    public Response rejectProfileChanges(ProfileDto dto){
+        profileService.rejectChanges(dto);
+
+        return Response.ok().build();
+    }
+
 }

@@ -6,18 +6,25 @@ import com.alex.project.dto.ModerationRequestDto;
 import com.alex.project.dto.ProfileDto;
 import com.alex.project.dto.ProfileRegistrationDto;
 import com.alex.project.entity.Alumni;
+import com.alex.project.exceptions.service.ModerationRequestException;
+import com.alex.project.exceptions.service.ProfileNotFoundException;
+import com.alex.project.exceptions.service.VerificationException;
 import com.alex.project.repository.ProfileRepository;
 import com.alex.project.utils.ProfileMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.postgresql.shaded.com.ongres.stringprep.Profile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 @ApplicationScoped
 public class ProfileService {
+
+    private static final Logger log = LoggerFactory.getLogger(ProfileService.class);
 
     @Inject
     ProfileRepository profileRepository;
@@ -36,20 +43,26 @@ public class ProfileService {
         alumni.setId(profileRegistrationDto.getId());
 
         profileRepository.persist(alumni);
+
+        log.info("Alumni with {} created", profileRegistrationDto.getEmail());
     }
 
     @Transactional
     public Alumni getAlumni(String email) {
-        return profileRepository.findByEmail(email.trim()).orElseThrow(() -> new RuntimeException("No profile found with email " + email));
+        return profileRepository.findByEmail(email.trim()).orElseThrow(() -> new ProfileNotFoundException("No profile found with email " + email));
     }
 
+    @Transactional
     public void updateProfile(ProfileDto profileDto, String email) {
         ModerationRequestDto dto = new ModerationRequestDto();
 
         Alumni alumni = profileRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("No profile found with email " + email));
+                .orElseThrow(() -> new ProfileNotFoundException("No profile found with email: " + email));
 
-        System.out.println(alumni.getEmail());
+        if(!alumni.isVerified()){
+            throw new VerificationException("Your account is under verification process. Please" +
+                    "try again later");
+        }
 
         changeVerificationState(alumni);
 
@@ -57,14 +70,18 @@ public class ProfileService {
 
         profileMapper.updateProfileDtoFromAlunmi(alumni, oldState);
 
-        System.out.println("Old profile state "  + oldState.toString());
+        profileDto.setEmail(email);
 
         dto.setTargetType("PROFILE");
         dto.setChanges(profileDto);
         dto.setOldState(oldState);
         dto.setOperationType(OperationType.UPDATING);
 
-        moderationServiceClient.createProfileModerationRequest(dto);
+        Response resp = moderationServiceClient.createProfileModerationRequest(dto);
+
+        if(resp.getStatus() > 300){
+            throw new ModerationRequestException("Moderation request creating error!");
+        }
     }
 
     @Transactional
@@ -73,14 +90,23 @@ public class ProfileService {
         profileRepository.persist(alumni);
     }
 
+    @Transactional
     public void acceptChanges(ProfileDto profileDto) {
-        ProfileDto dto = new ProfileDto();
-        Optional<Alumni> alumni = profileRepository.findByName(profileDto.getName(), profileDto.getSurname());
-        profileMapper.updateProfileFromDto(dto, alumni.orElse(null));
-        System.out.println("New profile state " + alumni.toString());
+        Alumni alumni = profileRepository.findByEmail(profileDto.getEmail())
+                .orElseThrow(() -> new ProfileNotFoundException("No profile found with email: " + profileDto.getEmail()));
+        profileMapper.updateProfileFromDto(profileDto, alumni);
 
-        alumni.ifPresent(this::changeVerificationState);
+        changeVerificationState(alumni);
 
-        profileRepository.persist(alumni.orElse(null));
+        profileRepository.persist(alumni);
+    }
+
+    public void rejectChanges(ProfileDto dto){
+        Alumni alumni = profileRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new ProfileNotFoundException("No profile found with email: " + dto.getEmail()));
+
+        changeVerificationState(alumni);
+
+        profileRepository.persist(alumni);
     }
 }
