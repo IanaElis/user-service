@@ -1,6 +1,6 @@
 package com.alex.project.service;
 
-import com.alex.project.entity.OperationType;
+import com.alex.project.entity.enums.OperationType;
 import com.alex.project.controller.ModerationServiceClient;
 import com.alex.project.dto.ModerationRequestDto;
 import com.alex.project.dto.ProfileDto;
@@ -18,8 +18,6 @@ import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 @ApplicationScoped
 public class ProfileService {

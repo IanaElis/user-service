@@ -19,6 +19,14 @@ public class Field {
     @Column(nullable = false)
     private int number;
 
+    public Field() {
+    }
+
+    public Field(String name, int number) {
+        this.name = name;
+        this.number = number;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,11 +1,11 @@
 package com.alex.project.entity;
 
+import com.alex.project.entity.enums.Form;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name = "alumni",

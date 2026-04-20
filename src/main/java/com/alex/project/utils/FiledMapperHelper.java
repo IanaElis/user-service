@@ -1,9 +1,7 @@
 package com.alex.project.utils;
 
 import com.alex.project.entity.Field;
-import com.alex.project.entity.Specialty;
-import com.alex.project.repository.FiledRepository;
-import com.alex.project.repository.SpecialtyRepository;
+import com.alex.project.repository.FieldRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -11,7 +9,7 @@ import jakarta.inject.Inject;
 public class FiledMapperHelper {
 
     @Inject
-    FiledRepository filedRepository;
+    FieldRepository fieldRepository;
 
     public String map(Field field) {
         return field == null ? null : field.getName();
@@ -20,6 +18,6 @@ public class FiledMapperHelper {
     public Field map(String name) {
         if (name == null) return null;
 
-        return filedRepository.findByName(name).orElse(null);
+        return fieldRepository.findByName(name).orElse(null);
     }
 }

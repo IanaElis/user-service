@@ -1,13 +1,4 @@
 package com.alex.project.dto;
 
-public class SearchUser {
-    private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+public record SearchUser(String email) {
 }

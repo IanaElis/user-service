@@ -1,6 +1,6 @@
 package com.alex.project.dto;
 
-import com.alex.project.entity.OperationType;
+import com.alex.project.entity.enums.OperationType;
 
 public class ModerationRequestDto {
     private String targetType;

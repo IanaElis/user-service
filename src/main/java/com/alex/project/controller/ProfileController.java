@@ -30,7 +30,7 @@ public class ProfileController {
     @POST
     @Path("/get")
     public Response getProfile(SearchUser email) {
-        return Response.ok(profileService.getAlumni(email.getEmail())).build();
+        return Response.ok(profileService.getAlumni(email.email())).build();
     }
 
     @POST
