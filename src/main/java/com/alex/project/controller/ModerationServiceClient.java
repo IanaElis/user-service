@@ -7,10 +7,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("internal/moderationProfiles")
+@Path("internal/moderation")
 @RegisterRestClient(configKey = "moderation-service")
 public interface ModerationServiceClient {
 
     @POST
+    @Path("/profiles")
     Response createProfileModerationRequest(ModerationRequestDto moderationRequestDto);
 }
