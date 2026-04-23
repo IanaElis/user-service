@@ -1,4 +1,7 @@
 package com.alex.project.dto;
 
-public record FieldDto(String name, int number) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
+public record FieldDto(@NotBlank String name, @Positive int number) {
 }

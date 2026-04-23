@@ -4,6 +4,7 @@ import com.alex.project.dto.FieldDto;
 import com.alex.project.service.api.FieldService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -24,7 +25,7 @@ public class FieldController {
 
     @POST
     @Path("/new")
-    public Response addNewField(FieldDto fieldDto){
+    public Response addNewField(@Valid FieldDto fieldDto){
         fieldService.addNewField(fieldDto);
 
         return Response.ok().build();

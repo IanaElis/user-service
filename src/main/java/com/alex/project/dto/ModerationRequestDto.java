@@ -1,9 +1,14 @@
 package com.alex.project.dto;
 
 import com.alex.project.entity.enums.OperationType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
 
 public class ModerationRequestDto {
+    @NotBlank
     private String targetType;
+
+    @NotBlank
     private ProfileDto changes;
     private OperationType operationType;
     private ProfileDto oldState;

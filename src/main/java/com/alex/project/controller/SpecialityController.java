@@ -6,6 +6,7 @@ import com.alex.project.service.api.FieldService;
 import com.alex.project.service.api.SpecialityService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -26,7 +27,7 @@ public class SpecialityController {
 
     @POST
     @Path("/new")
-    public Response addNewSpecialty(SpecialtyDto specialtyDto){
+    public Response addNewSpecialty(@Valid SpecialtyDto specialtyDto){
         specialityService.addNewSpeciality(specialtyDto);
 
         return Response.ok().build();

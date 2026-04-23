@@ -1,5 +1,6 @@
 package com.alex.project.service;
 
+import com.alex.project.dto.SearchUser;
 import com.alex.project.entity.enums.OperationType;
 import com.alex.project.controller.ModerationServiceClient;
 import com.alex.project.dto.ModerationRequestDto;
@@ -59,7 +60,7 @@ public class ProfileService {
 
         if(!alumni.isVerified()){
             throw new VerificationException("Your account is under verification process. Please" +
-                    "try again later");
+                    " try again later");
         }
 
         changeVerificationState(alumni);
@@ -85,7 +86,6 @@ public class ProfileService {
     @Transactional
     public void changeVerificationState(Alumni alumni) {
         alumni.setVerified(!alumni.isVerified());
-        profileRepository.persist(alumni);
     }
 
     @Transactional
@@ -99,9 +99,9 @@ public class ProfileService {
         profileRepository.persist(alumni);
     }
 
-    public void rejectChanges(ProfileDto dto){
-        Alumni alumni = profileRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new ProfileNotFoundException("No profile found with email: " + dto.getEmail()));
+    public void rejectChanges(SearchUser dto){
+        Alumni alumni = profileRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new ProfileNotFoundException("No profile found with email: " + dto.email()));
 
         changeVerificationState(alumni);
 

@@ -3,6 +3,9 @@ package com.alex.project.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @JsonTypeName("PROFILE")
 @JsonTypeInfo(
@@ -12,11 +15,22 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
         defaultImpl = ProfileDto.class
 )
 public class ProfileDto{
-    private String urlImage;
+    private String photoUrl;
     private Long facultyNumber;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String surname;
+
+    @Email
     private String email;
+
+    @Pattern(
+            regexp = "^\\+[1-9][0-9]{9,14}$",
+            message = "Invalid phone number format"
+    )
     private String phoneNumber;
     private String specialty;
     private String field;
@@ -37,11 +51,11 @@ public class ProfileDto{
         this.email = email;
     }
     public String getUrlImage() {
-        return urlImage;
+        return photoUrl;
     }
 
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
+    public void setUrlImage(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public Long getFacultyNumber() {
@@ -124,21 +138,5 @@ public class ProfileDto{
         this.position = position;
     }
 
-    @Override
-    public String toString() {
-        return "ProfileDto{" +
-                "urlImage='" + urlImage + '\'' +
-                ", facultyNumber=" + facultyNumber +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", specialty='" + specialty + '\'' +
-                ", field='" + field + '\'' +
-                ", form='" + form + '\'' +
-                ", country='" + country + '\'' +
-                ", workplace='" + workplace + '\'' +
-                ", position='" + position + '\'' +
-                '}';
-    }
 }
 

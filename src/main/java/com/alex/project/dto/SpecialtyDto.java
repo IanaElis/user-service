@@ -1,4 +1,7 @@
 package com.alex.project.dto;
 
-public record SpecialtyDto(String name) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record SpecialtyDto(@NotBlank String name) {
 }

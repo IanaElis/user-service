@@ -18,7 +18,7 @@ public class SpecialityService {
     @Transactional
     public void addNewSpeciality(SpecialtyDto specialtyDto){
         if(repository.findByName(specialtyDto.name()).isPresent()){
-            throw new RecordAlreadyExistException("This speciality already exist");
+            throw new RecordAlreadyExistException("This specialty already exist");
         }
 
         repository.persist(new Specialty(specialtyDto.name()));
