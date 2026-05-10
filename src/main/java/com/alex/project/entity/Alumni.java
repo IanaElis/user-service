@@ -2,35 +2,31 @@ package com.alex.project.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+
 import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name = "alumni",
         uniqueConstraints = @UniqueConstraint(columnNames = {"fac_number"}))
-@Indexed
 public class Alumni {
 
     @Id
     private Long id;
 
-    @Column(name = "photo_url")
+    @Column(name = "photo_key")
     private String photoUrl;
 
-    @Column(name = "fac_number")
+    @Column(name = "faculty_number")
     private Long facultyNumber;
 
     @Column(nullable = false)
-    @FullTextField(analyzer = "autocomplete")
     private String name;
 
     @Column(nullable = false)
-    @FullTextField(analyzer = "autocomplete")
     private String surname;
 
     @Email
+    @Column(nullable = false)
     private String email;
 
     @Column(name = "phone_number")
@@ -47,11 +43,13 @@ public class Alumni {
     @Enumerated(EnumType.STRING)
     private Form form;
 
+    @Column
     private String country;
+    @Column
     private String workplace;
+    @Column
     private String position;
-
-    @GenericField
+    @Column
     private boolean verified;
 
     public String getPhotoUrl() {

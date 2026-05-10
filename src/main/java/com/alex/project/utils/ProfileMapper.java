@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "cdi", uses = {SpecialtyMapperHelper.class,
+@Mapper(componentModel = "JAKARTA", uses = {SpecialtyMapperHelper.class,
         FiledMapperHelper.class})
 public interface ProfileMapper {
         ProfileDto toDto(Alumni profile);

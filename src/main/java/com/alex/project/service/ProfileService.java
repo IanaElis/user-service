@@ -1,7 +1,8 @@
 package com.alex.project.service;
 
+import com.alex.project.controller.client.FriendServiceApiClient;
 import com.alex.project.entity.OperationType;
-import com.alex.project.controller.ModerationServiceClient;
+import com.alex.project.controller.client.ModerationServiceClient;
 import com.alex.project.dto.ModerationRequestDto;
 import com.alex.project.dto.ProfileDto;
 import com.alex.project.dto.ProfileRegistrationDto;
@@ -12,7 +13,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.postgresql.shaded.com.ongres.stringprep.Profile;
 
 import java.util.Optional;
 
@@ -24,6 +24,9 @@ public class ProfileService {
 
     @RestClient
     ModerationServiceClient moderationServiceClient;
+
+    @RestClient
+    FriendServiceApiClient friendServiceApiClient;
 
     @Inject
     ProfileMapper profileMapper;
@@ -39,8 +42,13 @@ public class ProfileService {
     }
 
     @Transactional
-    public Alumni getAlumni(String email) {
+    public Alumni getAlumniByEmail(String email) {
         return profileRepository.findByEmail(email.trim()).orElseThrow(() -> new RuntimeException("No profile found with email " + email));
+    }
+
+    @Transactional
+    public Alumni getAlumniById(Long id) {
+        return profileRepository.findByIdOptional(id).orElseThrow(() -> new RuntimeException("No profile found with id " + id));
     }
 
     public void updateProfile(ProfileDto profileDto, String email) {
@@ -69,17 +77,24 @@ public class ProfileService {
 
     @Transactional
     public void changeVerificationState(Alumni alumni) {
+        // TODO: question - what if the user is verified globally but wants just to update the profile, do they just lose control of the system completely?
+        //  consider global verification and local verification flag so that user would have just a request open
+        //  !!! if they were verified before, so that they do not lose control
+        //  of the system
         alumni.setVerified(!alumni.isVerified());
+
         profileRepository.persist(alumni);
     }
 
     public void acceptChanges(ProfileDto profileDto) {
         ProfileDto dto = new ProfileDto();
-        Optional<Alumni> alumni = profileRepository.findByName(profileDto.getName(), profileDto.getSurname());
+        Optional<Alumni> alumni = profileRepository.findByIdOptional(profileDto.getUserId());
         profileMapper.updateProfileFromDto(dto, alumni.orElse(null));
         System.out.println("New profile state " + alumni.toString());
 
         alumni.ifPresent(this::changeVerificationState);
+
+        friendServiceApiClient.saveOrUpdateUser(profileDto);
 
         profileRepository.persist(alumni.orElse(null));
     }

@@ -1,7 +1,6 @@
-package com.alex.project.controller;
+package com.alex.project.controller.client;
 
 import com.alex.project.dto.ModerationRequestDto;
-import com.alex.project.dto.ProfileDto;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;

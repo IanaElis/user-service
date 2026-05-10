@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
         defaultImpl = ProfileDto.class
 )
 public class ProfileDto{
+    // TODO: ideas - year of graduation, department (катедра)
+    private long userId;
     private String urlImage;
     private Long facultyNumber;
     private String name;
@@ -24,7 +26,9 @@ public class ProfileDto{
     private String workplace;
     private String position;
 
-    public ProfileDto(Long facultyNumber, String name, String surname, String phoneNumber, String specialty, String field, String form, String country, String workplace, String position) {
+    public ProfileDto(long userId, String urlImage, Long facultyNumber, String name, String surname, String phoneNumber, String specialty, String field, String form, String country, String workplace, String position) {
+        this.userId = userId;
+        this.urlImage = urlImage;
         this.facultyNumber = facultyNumber;
         this.name = name;
         this.surname = surname;
@@ -38,6 +42,14 @@ public class ProfileDto{
     }
 
     public ProfileDto() {
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getUrlImage() {
